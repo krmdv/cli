@@ -1,0 +1,35 @@
+# Check https://goreleaser.com/customization/env/
+env:
+  - GO111MODULE=on
+  - GOPROXY=https://goproxy.io
+
+# Check https://goreleaser.com/customization/hooks/
+before:
+  hooks:
+  - go mod download
+
+# Check https://goreleaser.com/customization/build/
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - darwin
+      - linux
+    goarch:
+      - amd64
+    ignore:
+      - goos: darwin
+        goarch: 386
+      - goos: linux
+        goarch: arm
+        goarm: 7
+      - goarm: mips64
+        gomips: hardfloat
+
+# Check https://goreleaser.com/customization/archive/
+archives:
+  - name_template: "karma_{{ .Version }}_{{ .Os }}_{{ .Arch }}"  
+    replacements:
+      amd64: x86_64
+
+project_name: karma
